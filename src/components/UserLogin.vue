@@ -51,21 +51,20 @@ export default {
         this.$refs.passwordInput.focus();
         return;
       }
-      let that = this;
-      that.ajaxPost(
+      this.ajaxPost(
         "god/user/logon.json",
         { account: account, password: password },
         {
-          "1": function(data) {
-            that.$store.commit("setSessionUser", {
+          "1": data => {
+            this.$store.commit("setSessionUser", {
               userId: data.userId,
               logonStatus: true,
               account: data.account,
               username: data.name
             });
-            let redirect = that.$router.currentRoute.query.redirect;
+            let redirect = this.$router.currentRoute.query.redirect;
             redirect = redirect ? redirect : "/";
-            that.$router.push({
+            this.$router.push({
               path: redirect
             });
           }

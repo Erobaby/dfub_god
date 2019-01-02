@@ -7,19 +7,17 @@ const key = 'sessionUser'
 const store = new Vuex.Store({
   state() {
     return {
-      sessionUser: {
-        'userId': 0,
-        'logonStatus': false,
-        'account': '',
-        'username': '游客'
-      }
+      sessionUser: null
     }
   },
   getters: {
     sessionUser: function (state) {
-      state.sessionUser = localStorage.getItem(key)
       if (state.sessionUser) {
-        state.sessionUser = JSON.parse(state.sessionUser)
+        return state.sessionUser
+      }
+      let localSessionUser = localStorage.getItem(key)
+      if (localSessionUser) {
+        state.sessionUser = JSON.parse(localSessionUser)
       } else {
         state.sessionUser = {
           'userId': 0,

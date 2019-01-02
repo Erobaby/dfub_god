@@ -31,21 +31,48 @@ let getDeviceId = function () {
   localSet('deviceId', deviceId)
 }
 
-let getSessionUser = function () {
-  let sessionUser = localStorage.getItem('sessionUser')
-  if (sessionUser) {
-    sessionUser = JSON.parse(sessionUser)
-  } else {
-    sessionUser = {
-      'userId': 0,
-      'logonStatus': false,
-      'account': '',
-      'username': '游客'
-    }
+// let getSessionUser = function () {
+//   let sessionUser = localStorage.getItem('sessionUser')
+//   if (sessionUser) {
+//     sessionUser = JSON.parse(sessionUser)
+//   } else {
+//     sessionUser = {
+//       'userId': 0,
+//       'logonStatus': false,
+//       'account': '',
+//       'username': '游客'
+//     }
+//   }
+//   return sessionUser
+// }
+let commonSuccessDict = {
+  '0': (vue, data, message) => {
+    vue.$message.error(message)
+  },
+  '-1': (vue) => {
+    vue.$store.commit("clearSessionUser");
+    vue.$router.push({
+      path: "/user_login"
+    });
+  },
+  '-2': (vue) => {
+    vue.$store.commit("clearSessionUser");
+    vue.$router.push({
+      path: "/user_login"
+    });
+  },
+  'default': (vue, data, message) => {
+    vue.$message.error(message)
   }
-  return sessionUser
 }
-
+let commonErrorDict = {
+  '404': (vue) => {
+    vue.$message.error("该功能尚未实现")
+  },
+  'default': (vue, res, status) => {
+    vue.$message.error("错误码" + status)
+  }
+}
 let ajaxRequest = function (method, url, data, successDict, errorDict) {
   let baseUrl = 'http://127.0.0.1:8001'
   let reqUrl = url
@@ -77,14 +104,16 @@ let ajaxRequest = function (method, url, data, successDict, errorDict) {
       if (successDict) {
         codeHandler = successDict[code]
       }
-      if (!codeHandler) {
-        codeHandler = this.commonSuccessDict[code]
-      }
-      if (!codeHandler) {
-        codeHandler = this.commonSuccessDict['default']
-      }
       if (codeHandler) {
         codeHandler(data, message, code)
+      } else {
+        codeHandler = commonSuccessDict[code]
+        if (!codeHandler) {
+          codeHandler = commonSuccessDict['default']
+        }
+        if (codeHandler) {
+          codeHandler(this, data, message, code)
+        }
       }
     })
     .catch((err) => {
@@ -96,15 +125,18 @@ let ajaxRequest = function (method, url, data, successDict, errorDict) {
       if (errorDict) {
         errorHandler = errorDict[respStatusCode]
       }
-      if (!errorHandler) {
-        errorHandler = this.commonErrorDict[respStatusCode]
-      }
-      if (!errorHandler) {
-        errorHandler = this.commonErrorDict['default']
-      }
       if (errorHandler) {
         errorHandler(err.response, respStatusCode)
+      } else {
+        errorHandler = commonErrorDict[respStatusCode]
+        if (!errorHandler) {
+          errorHandler = commonErrorDict['default']
+        }
+        if (errorHandler) {
+          errorHandler(this, err.response, respStatusCode)
+        }
       }
+
     })
 }
 
@@ -119,40 +151,12 @@ Vue.prototype.localSet = localSet
 Vue.prototype.getDeviceId = getDeviceId
 Vue.prototype.ajaxRequest = ajaxRequest
 Vue.prototype.ajaxPost = ajaxPost
-Vue.prototype.commonSuccessDict = {
-  '0': function (data, message) {
-    alert(message)
-    this.$message.error(message)
-  },
-  '-1': function () {
-    this.$store.commit("clearSessionUser");
-    this.$router.push({
-      path: "/user_login"
-    });
-  },
-  '-2': function () {
-    this.$store.commit("clearSessionUser");
-    this.$router.push({
-      path: "/user_login"
-    });
-  },
-  'default': function (data, message) {
-    this.$message.error(message)
-  }
-}
-Vue.prototype.commonErrorDict = {
-  '404': function () {
-    this.$message.error("该功能尚未实现")
-  },
-  'default': function (res, status) {
-    this.$message.error("错误码" + status)
-  }
-}
+
 
 const common = {
   localGet: localGet,
   localSet: localSet,
   getDeviceId: getDeviceId,
-  getSessionUser: getSessionUser
+  // getSessionUser: getSessionUser
 }
 export default common

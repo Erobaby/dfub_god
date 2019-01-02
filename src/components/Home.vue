@@ -38,7 +38,7 @@ export default {
   name: "Home",
   data: function() {
     return {
-      sessionUser: this.getSessionUser()
+      sessionUser: this.$store.getters.sessionUser
     };
   }
 };

@@ -77,19 +77,19 @@
 export default {
   data: function() {
     return {
-      sessionUser: this.$store.state.sessionUser
+      sessionUser: this.$store.getters.sessionUser
     };
   },
   methods: {
     logout() {
-      this.sessionUser = {
-        userId: 0,
-        logonStatus: false,
-        account: "",
-        username: "游客"
-      };
+      // this.sessionUser = {
+      //   userId: 0,
+      //   logonStatus: false,
+      //   account: "",
+      //   username: "游客"
+      // };
       this.$store.commit("clearSessionUser");
-      this.$router.push({ path: "/" });
+      this.$router.push({ path: "/user_login" });
     },
     onCollapse(collapsed, type) {
       console.log(collapsed, type);
@@ -102,9 +102,4 @@ export default {
 </script>
 
 <style>
-#components-layout-demo-responsive .logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px;
-}
 </style>
