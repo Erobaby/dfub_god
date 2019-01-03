@@ -22,6 +22,9 @@
           <a-menu-item key="m_user_account">
             <router-link to="/user_account">账号查询</router-link>
           </a-menu-item>
+          <a-menu-item key="m_user_student_code_bind">
+            <router-link to="/user_student_code_bind">学员号绑定</router-link>
+          </a-menu-item>
         </a-sub-menu>
 
         <!-- 排课 -->
@@ -55,13 +58,13 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header :style="{ background: '#fff', padding: 0 }">
-        <a-row v-if="sessionUser.logonStatus">
+        <a-row v-if="$store.getters.sessionUser.logonStatus">
           <span>不忘初心，砥砺前行</span>
-          <span>{{sessionUser.username}}</span>
+          <span>{{$store.getters.sessionUser.username}}</span>
           <a-button type="primary" @click="logout">退出</a-button>
         </a-row>
-        <a-row v-if="!sessionUser.logonStatus">
-          <span>{{sessionUser.username}}</span>
+        <a-row v-if="!$store.getters.sessionUser.logonStatus">
+          <span>{{$store.getters.sessionUser.username}}</span>
         </a-row>
       </a-layout-header>
       <a-layout-content :style="{ margin: '24px 16px 0' }">
@@ -75,19 +78,8 @@
 </template>
 <script>
 export default {
-  data: function() {
-    return {
-      sessionUser: this.$store.getters.sessionUser
-    };
-  },
   methods: {
     logout() {
-      // this.sessionUser = {
-      //   userId: 0,
-      //   logonStatus: false,
-      //   account: "",
-      //   username: "游客"
-      // };
       this.$store.commit("clearSessionUser");
       this.$router.push({ path: "/user_login" });
     },

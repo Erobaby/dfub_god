@@ -153,10 +153,10 @@ Vue.prototype.ajaxRequest = ajaxRequest
 Vue.prototype.ajaxPost = ajaxPost
 
 
-const common = {
-  localGet: localGet,
-  localSet: localSet,
-  getDeviceId: getDeviceId,
-  // getSessionUser: getSessionUser
-}
-export default common
+// const common = {
+//   localGet: localGet,
+//   localSet: localSet,
+//   getDeviceId: getDeviceId,
+//   // getSessionUser: getSessionUser
+// }
+// export default common

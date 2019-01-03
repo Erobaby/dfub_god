@@ -1,13 +1,23 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
+/** 主页 */
 import Home from '../components/Home.vue'
+
+/** 用户相关 */
 import UserStudentCode from '../components/UserStudentCode.vue'
 import UserAccount from '../components/UserAccount.vue'
 import UserLogin from '../components/UserLogin.vue'
+import UserStudentCodeBind from '../components/UserStudentCodeBind.vue'
+
+/** 班级相关 */
 import ClassInfo from '../components/ClassInfo.vue'
 import ClassStudent from '../components/ClassStudent.vue'
 import ClassLiveUrl from '../components/ClassLiveUrl.vue'
+
+/** 系统相关 */
 import SystemSetting from '../components/SystemSetting.vue'
+
 
 Vue.use(VueRouter)
 /** 全局路由 */
@@ -35,6 +45,12 @@ const routes = [{
     requireAuth: false
   },
   component: UserLogin
+}, {
+  path: '/user_student_code_bind',
+  meta: {
+    requireAuth: false
+  },
+  component: UserStudentCodeBind
 }, {
   path: '/class_info',
   meta: {
