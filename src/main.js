@@ -5,6 +5,7 @@ import App from './App.vue'
 import store from './store'
 import router from './router'
 import './common'
+import dateFormat from './filter/date'
 
 import 'ant-design-vue/dist/antd.css'
 
@@ -29,8 +30,10 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+Vue.filter('formatDate', dateFormat.formatDate);
+
 new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
