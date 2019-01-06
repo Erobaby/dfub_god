@@ -31,20 +31,6 @@ let getDeviceId = function () {
   localSet('deviceId', deviceId)
 }
 
-// let getSessionUser = function () {
-//   let sessionUser = localStorage.getItem('sessionUser')
-//   if (sessionUser) {
-//     sessionUser = JSON.parse(sessionUser)
-//   } else {
-//     sessionUser = {
-//       'userId': 0,
-//       'logonStatus': false,
-//       'account': '',
-//       'username': '游客'
-//     }
-//   }
-//   return sessionUser
-// }
 let commonSuccessDict = {
   '0': (vue, data, message) => {
     vue.$message.error(message)

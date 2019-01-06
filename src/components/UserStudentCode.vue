@@ -1,84 +1,76 @@
 <template>
-  <div class="hello">
-    <a-button type="primary">Primary</a-button>
-    <a-button>Default</a-button>
-    <a-button type="dashed">Dashed</a-button>
-    <a-button type="danger">Danger</a-button>
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,
-      <br>check out the
-      <a
-        href="https://cli.vuejs.org"
-        target="_blank"
-        rel="noopener"
-      >vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel"
-          target="_blank"
-          rel="noopener"
-        >babel</a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint"
-          target="_blank"
-          rel="noopener"
-        >eslint</a>
-      </li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li>
-        <a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a>
-      </li>
-      <li>
-        <a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a>
-      </li>
-      <li>
-        <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a>
-      </li>
-      <li>
-        <a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a>
-      </li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li>
-        <a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a>
-      </li>
-      <li>
-        <a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-devtools#vue-devtools"
-          target="_blank"
-          rel="noopener"
-        >vue-devtools</a>
-      </li>
-      <li>
-        <a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a>
-      </li>
-      <li>
-        <a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a>
-      </li>
-    </ul>
+  <div>
+    <br>
+    <a-row>
+      <a-col :xs="2" :sm="4" :md="6" :lg="8" :xl="8"></a-col>
+      <a-col :xs="20" :sm="16" :md="12" :lg="8" :xl="8">
+        <a-input v-model.trim="account" placeholder="请输入账号"></a-input>
+      </a-col>
+      <a-col :xs="2" :sm="4" :md="6" :lg="8" :xl="8"></a-col>
+    </a-row>
+    <br>
+    <a-row>
+      <a-col :xs="2" :sm="4" :md="6" :lg="8" :xl="8"></a-col>
+      <a-col :xs="20" :sm="16" :md="12" :lg="8" :xl="8">
+        <a-input type="password" v-model.trim="password" ref="passwordInput" placeholder="请输入密码"/>
+      </a-col>
+      <a-col :xs="2" :sm="4" :md="6" :lg="8" :xl="8"></a-col>
+    </a-row>
+    <br>
+    <a-row type="flex" justify="center" align="top">
+      <a-col :xs="2" :sm="4" :md="6" :lg="8" :xl="8"></a-col>
+      <a-col :xs="20" :sm="16" :md="12" :lg="8" :xl="8">
+        <a-button type="primary" @click="logon">登录</a-button>
+      </a-col>
+      <a-col :xs="2" :sm="4" :md="6" :lg="8" :xl="8"></a-col>
+    </a-row>
+    <br>
   </div>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
-  props: {
-    msg: String
+  name: "UserStudentCode",
+  data: function() {
+    return {
+      account: "",
+      password: ""
+    };
+  },
+  methods: {
+    logon() {
+      let account = this.account + "@xdf.cn";
+      let password = this.password;
+      if (!account) {
+        this.$message.warn("账号不能为空");
+        this.$refs.accountInput.focus();
+        return;
+      }
+      if (!password) {
+        this.$message.warn("密码不能为空");
+        this.$refs.passwordInput.focus();
+        return;
+      }
+      this.ajaxPost(
+        "god/user/logon.json",
+        { account: account, password: password },
+        {
+          "1": data => {
+            this.$store.commit("setSessionUser", {
+              userId: data.userId,
+              logonStatus: true,
+              account: data.account,
+              username: data.name
+            });
+            let redirect = this.$router.currentRoute.query.redirect;
+            redirect = redirect ? redirect : "/";
+            this.$router.push({
+              path: redirect
+            });
+          }
+        }
+      );
+    }
   }
 };
 </script>
